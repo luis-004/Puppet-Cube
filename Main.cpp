@@ -31,9 +31,10 @@ int main()
     std::vector<Puppet::ShapeBin> shapes = S.computeAllShapes();
     auto scramble = S.RandomShape(40,shapes);
     std::cout << "Ready" << std::endl;
+    uint16_t count = 0;
     while(true){
         std::getline(std::cin, input);
-        std::cout << am.translateRightie(am.translateYX2(scramble)) << std::endl;
+        std::cout << ++count << " " << am.translateRightie(am.translateYX2(scramble));
         if (input == "q") break;
         if (input == "c") system("cls");
         //system("cls");
