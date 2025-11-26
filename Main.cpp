@@ -28,7 +28,7 @@ int main()
     Puppet::Corners corners;
     Puppet::Flips flips;
     std::string input;
-    std::vector<Puppet::ShapeBin> shapes = S.computeAllShapes();
+    /*std::vector<Puppet::ShapeBin> shapes = S.computeAllShapes();
     auto scramble = S.RandomShape(40,shapes);
     std::cout << "Ready" << std::endl;
     uint16_t count = 0;
@@ -39,7 +39,7 @@ int main()
         if (input == "c") system("cls");
         //system("cls");
         scramble = S.RandomShape(40,shapes);
-    }
+    }*/
     //std::cout << am.translateRightie(am.reverse(std::vector<std::array<uint8_t, 2>> {}));
     //std::cout << am.translateLeftie(am.swap(am.translateBack("URU2R'F'U'F'R2FRF'RFUF2U'R'URU2R'U'"), 2)) << std::endl;
     //std::cout << am.translateRightie(am.reverse(am.swap(am.translateBack("U'RF'U2FRUFR2F'R'U'R'U"), 2))) << std::endl;
@@ -47,7 +47,7 @@ int main()
     //std::cout << am.translateRightie(am.reverse(am.swap(am.translateBack("U2R'F'UFRU2R'U'RFR2F'U2"), 2))) << std::endl;
     //algfinder.searchCubeShapeL(13);
     //std::cout << am.translateRightie(am.translateYX2(am.translateBack("RU'R2UR2U2R2F2R2U2R2F2U'R2UR'"))) << std::endl;
-    // ext.printLtoLayer();
+    ext.printLtoLayer();
     //ext.searchFlipsFast(8);
     // algfinder.searchCubeShapeL(13);
     //algfinder.searchAllShapes();

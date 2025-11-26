@@ -246,25 +246,15 @@ std::vector<std::pair<Puppet::Shape, std::vector<std::array<uint8_t, 2>>>> AlgFi
     }
 }
 
-void AlgFinderExt::searchToLayer(const Puppet::Shape& start){
+std::vector<std::array<uint8_t, 2>> AlgFinderExt::searchToLayer(const Puppet::Shape& start, uint8_t flag){
     Puppet::Shape shape;
     int8_t last_turn = -1;
     std::queue<std::vector<std::array<uint8_t, 2>>> algs;
     Puppet::ShapeBin found_shape = puppet.getBinShape(start);
     std::vector<Puppet::ShapeBin> found_shapes = {puppet.getBinShape(start)};
-    shape = start;
-    //std::memcpy(shape.data, start.data, sizeof(Puppet::Shape::data));
     std::vector<std::array<uint8_t, 2>> alg;
-    if(puppet.testCubeShape(shape)||puppet.testVShape(shape)||puppet.testLayer(shape)
-        ||puppet.testYShape(shape)||puppet.testBShape(shape)
-        ||puppet.testU2VShape(shape)||puppet.testLShape(shape)
-        ||puppet.testU2LShape(shape)/*||puppet.testLBShape(shape)*/){
-        std::cout << "#0" << std::endl;
-        return;
-    }
     bool s = true;
     while(true){
-        //std::memcpy(shape.data, start.data, sizeof(Puppet::Shape::data));
         shape = start;
         if(!algs.empty()){
             alg = algs.front();
@@ -281,31 +271,56 @@ void AlgFinderExt::searchToLayer(const Puppet::Shape& start){
         for(uint8_t face = 0; face < 3; ++face){
             if(face == last_turn){continue;}
             bool HT_possible = false;
-            bool hit = false;
+            bool new_shape = false;
             for(uint8_t t = 2; t < 5; t++){
                 if((HT_possible || t != 4) && puppet.doTurn(shape, face, t % 3)){
                     alg.push_back({face, uint8_t(t % 3)});
-                    hit = true;
+                    new_shape = true;
                     found_shape = puppet.getBinShape(shape);
                     for(uint16_t i = 0; i < found_shapes.size(); i++){
                         if(std::memcmp(found_shapes[i].data, found_shape.data, sizeof(Puppet::ShapeBin::data)) == 0){
-                            hit = false;
+                            new_shape = false;
                             break;
                         }
                     }
-                    if(hit){
-                        if(puppet.testCubeShape(shape)||puppet.testVShape(shape)||puppet.testLayer(shape)
-                        ||puppet.testYShape(shape)||puppet.testBShape(shape)
-                        ||puppet.testU2VShape(shape)||puppet.testLShape(shape)
-                        ||puppet.testU2LShape(shape)/*||puppet.testLBShape(shape)*/){
-                            //auto pair =  am.reverse(am.translateYX2(am.reverse(alg)));
-                            //auto pair = am.translateYX2(alg);
-                            auto pair = alg;
-                            std::cout << am.translateRightie(pair) << " " << am.translateLeftie(pair) <<" " << 
-                            am.translateRightie(am.reverse(pair)) << " " << am.translateLeftie(am.reverse(pair)) <<" #" << int(alg.size());
-                            std::cout << std::endl;
-                            return;
-                        } 
+                    if(new_shape){
+                        if(puppet.testCubeShape(shape)){
+                            std::cout << "$Cube ";
+                            return alg;
+                        }else if(puppet.testLayer(shape)){
+                            std::cout << "$Layer ";
+                            return alg;
+                        }else if(flag > 1 && puppet.testBShape(shape)){
+                            std::cout << "$B ";
+                            return alg;
+                        }else if(flag > 1 && puppet.testVShape(shape)){
+                            uint8_t f = puppet.getVShape(found_shape) == 2? 2: !puppet.getVShape(found_shape);
+                            if(puppet.testTurn(shape,f,0) && puppet.testTurn(shape,f,2) && puppet.testTurn(shape,f,1)){
+                                std::cout << "$V ";
+                                return alg;
+                            }else if(flag > 2){
+                                std::cout << "$lockedV ";
+                                return alg;
+                            }
+                        }else if(flag > 1 && puppet.testU2VShape(shape)){
+                            uint8_t f = puppet.getU2VShape(found_shape) == 2? 2: !puppet.getU2VShape(found_shape);
+                            if(puppet.testTurn(shape,f,0) && puppet.testTurn(shape,f,2) && puppet.testTurn(shape,f,1)){
+                                std::cout << "$U2V ";
+                                return alg;
+                            }else if(flag > 2){
+                                std::cout << "$lockedU2V ";
+                                return alg;
+                            }
+                        }else if(flag > 3 && puppet.testLShape(shape)){
+                            std::cout << "$L ";
+                            return alg;
+                        }else if(flag > 3 && puppet.testU2LShape(shape)){
+                            std::cout << "$U2L ";
+                            return alg;
+                        }else if(flag > 3 && puppet.testLBShape(shape)){
+                            std::cout << "$R ";
+                            return alg;
+                        }
                         algs.push(alg);
                         found_shapes.push_back(found_shape);
                     }
@@ -316,6 +331,7 @@ void AlgFinderExt::searchToLayer(const Puppet::Shape& start){
             }
         }
     }
+    return {};
 }
 
 void AlgFinderExt::printLtoLayer(){
@@ -330,18 +346,23 @@ void AlgFinderExt::printLtoLayer(){
         std::cout << i << " " << am.translateRightie(alg) << " " << am.translateLeftie(alg) <<" " << 
         am.translateRightie(am.reverse(alg)) << " " << am.translateLeftie(am.reverse(alg)) <<" " << int(alg.size())<< " ";
         Puppet::ShapeBin found_shape = puppet.getBinShape(shape);
+        uint8_t flag = 4;
         if(puppet.testVShape(shape)){
             if(puppet.testLayer(shape)){
-                std::cout << " #Layer";
+                flag = 0;
+                std::cout << "#Layer";
             }else{
                 uint8_t f = puppet.getVShape(found_shape) == 2? 2: !puppet.getVShape(found_shape);
                 if(!puppet.testTurn(shape,f,0) || !puppet.testTurn(shape,f,2) || !puppet.testTurn(shape,f,1)){
-                    std::cout << " #lockedV";
+                    flag = 2;
+                    std::cout << "#lockedV";
                 }else{
-                    std::cout << " #V";
+                    flag = 1;
+                    std::cout << "#V";
                 }
             }
         }else if(puppet.testBShape(shape)){
+            flag = 1;
             std::cout << " #B";
         }else if(puppet.testLShape(shape)){
             for(uint8_t f = 0; f < 3; f++){
@@ -351,7 +372,8 @@ void AlgFinderExt::printLtoLayer(){
                             if(!puppet.testVShape(shape)){
                                 if(puppet.doTurn(shape,f,0)){
                                     if(!puppet.testVShape(shape)){
-                                        std::cout << " #L";
+                                        flag = 3;
+                                        std::cout << "#L";
                                     }
                                     puppet.doTurn(shape,f,2);
                                 }
@@ -365,17 +387,34 @@ void AlgFinderExt::printLtoLayer(){
         }else if(puppet.testU2VShape(shape)){
             uint8_t f = puppet.getU2VShape(found_shape) == 2? 2: !puppet.getU2VShape(found_shape);
             if(!puppet.testTurn(shape,f,1)){
-                std::cout << " #lockedU2V";
+                flag = 2;
+                std::cout << "#lockedU2V";
             }
         }else if(puppet.testU2LShape(shape)){
             uint8_t f = puppet.getU2LShape(found_shape) == 2? 2: !puppet.getU2LShape(found_shape);
             if(!puppet.testTurn(shape,f,1)){
-                std::cout << " #lockedU2L";
+                flag = 3;
+                std::cout << "#lockedU2L";
             }
         }else if(puppet.testLBShape(shape)){
-            std::cout << " #LB";
+            flag = 3;
+            std::cout << "#R";
         }
         std::cout << std::endl;
-        searchToLayer(Lshapes[i].first);
+        if(flag > 0){
+            auto fullalg = searchToLayer(Lshapes[i].first, flag);
+            size_t size = Lshapes[i].second.size();
+            fullalg.insert(fullalg.begin(),Lshapes[i].second.begin(),Lshapes[i].second.end());
+            fullalg = am.translateYX2(fullalg);
+            std::vector<std::array<uint8_t, 2>> toCase; 
+            for(size_t s = size; s < fullalg.size(); s++){
+                toCase.push_back(fullalg.at(s));
+            }
+            std::cout << am.translateRightie(toCase) << " " << am.translateLeftie(toCase) << " " << 
+            am.translateRightie(am.reverse(toCase)) << " " << am.translateLeftie(am.reverse(toCase)) << " " << int(flag) << " #" << int(toCase.size())<< " ";
+            std::cout << std::endl;
+        }else{
+            std::cout << "#0" << std::endl;
+        }
     }
 }

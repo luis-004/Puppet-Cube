@@ -23,6 +23,6 @@ class AlgFinderExt{
         auto computeAlgsFast(uint8_t max_turns);
         void searchFlipsFast(uint8_t max_turns, bool odd);
         std::vector<std::pair<Puppet::Shape, std::vector<std::array<uint8_t, 2>>>> searchShapes();
-        void searchToLayer(const Puppet::Shape& start);
+        std::vector<std::array<uint8_t, 2>> searchToLayer(const Puppet::Shape& start, uint8_t flag);
         void printLtoLayer();
     };
