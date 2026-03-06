@@ -123,7 +123,7 @@ void AlgFinderExt::searchFlipsFast(uint8_t max_turns, bool odd){
                 for(auto turn : alg){
                     puppet.doTurnCorners(corners, turn[0], turn[1]);
                 }
-                if(!puppet.testCornersSolved(corners)){
+                if(puppet.testCornersSolved(corners)){ //!!!
                     continue;
                 }
                 puppet.solvedEdges(edges);
@@ -133,13 +133,13 @@ void AlgFinderExt::searchFlipsFast(uint8_t max_turns, bool odd){
                 if(puppet.countEdgesSolved(edges) != 9){
                     continue;
                 }
-                puppet.solvedFlips(flips);
+                /*puppet.solvedFlips(flips);
                 for(auto turn : alg){
                     puppet.doTurnFlips(flips, turn[0], turn[1]);
                 }
                 if(puppet.countFlips(flips) == 0){
                     continue;
-                }
+                }*/
                 auto pair =  am.optimizeRUF(am.translateYX2(alg), am.getRUF(am.translateYX2(alg)));
                 std::cout << am.translateRightie(pair.first) << " " << am.translateLeftie(pair.first) <<" " << 
                 am.translateRightie(am.reverse(pair.first)) << " " << am.translateLeftie(am.reverse(pair.first)) <<" " << int(alg.size())<< " ";
@@ -311,16 +311,22 @@ std::vector<std::array<uint8_t, 2>> AlgFinderExt::searchToLayer(const Puppet::Sh
                                 std::cout << "$lockedU2V ";
                                 return alg;
                             }
-                        }else if(flag > 3 && puppet.testLShape(shape)){
+                        }else if(flag > 1 && puppet.test90VShape(shape)){
+                            uint8_t f = puppet.get90VShape(found_shape) == 2? 2: !puppet.get90VShape(found_shape);
+                            if(puppet.testTurn(shape,f,0) && puppet.testTurn(shape,f,2) && puppet.testTurn(shape,f,1)){
+                                std::cout << "$90V ";
+                                return alg;
+                            }else if(flag > 2){
+                                std::cout << "$locked90V ";
+                                return alg;
+                            }
+                        }/*else if(flag > 3 && (puppet.testL1Shape(shape)||puppet.testL2Shape(shape)||puppet.testL3Shape(shape)||puppet.testL4Shape(shape))){
                             std::cout << "$L ";
-                            return alg;
-                        }else if(flag > 3 && puppet.testU2LShape(shape)){
-                            std::cout << "$U2L ";
                             return alg;
                         }else if(flag > 3 && puppet.testLBShape(shape)){
                             std::cout << "$R ";
                             return alg;
-                        }
+                        }*/
                         algs.push(alg);
                         found_shapes.push_back(found_shape);
                     }
@@ -364,42 +370,57 @@ void AlgFinderExt::printLtoLayer(){
         }else if(puppet.testBShape(shape)){
             flag = 1;
             std::cout << " #B";
-        }else if(puppet.testLShape(shape)){
-            for(uint8_t f = 0; f < 3; f++){
-                if(puppet.doTurn(shape,f,0)){
-                    if(!puppet.testVShape(shape)){
-                        if(puppet.doTurn(shape,f,0)){
-                            if(!puppet.testVShape(shape)){
-                                if(puppet.doTurn(shape,f,0)){
-                                    if(!puppet.testVShape(shape)){
-                                        flag = 3;
-                                        std::cout << "#L";
-                                    }
-                                    puppet.doTurn(shape,f,2);
-                                }
-                            }
-                            puppet.doTurn(shape,f,2);
-                        } 
-                    }
-                    puppet.doTurn(shape,f,2);
-                }
-            }
         }else if(puppet.testU2VShape(shape)){
             uint8_t f = puppet.getU2VShape(found_shape) == 2? 2: !puppet.getU2VShape(found_shape);
             if(!puppet.testTurn(shape,f,1)){
                 flag = 2;
                 std::cout << "#lockedU2V";
             }
-        }else if(puppet.testU2LShape(shape)){
-            uint8_t f = puppet.getU2LShape(found_shape) == 2? 2: !puppet.getU2LShape(found_shape);
+        }else if(puppet.test90VShape(shape)){
+            uint8_t f = puppet.get90VShape(found_shape) == 2? 2: !puppet.get90VShape(found_shape);
+            if(!puppet.testTurn(shape,f,0)&&!puppet.testTurn(shape,f,2)){
+                flag = 2;
+                std::cout << "#locked90V";
+            }
+        }/*else if(puppet.testL1Shape(shape)){
+            flag = 3;
+            std::cout << "#L1";
+        }else if(puppet.testL3Shape(shape)){
+            uint8_t f = puppet.getL3Shape(found_shape) == 2? 2: !puppet.getL3Shape(found_shape);
             if(!puppet.testTurn(shape,f,1)){
                 flag = 3;
-                std::cout << "#lockedU2L";
+                std::cout << "#L3";
+            }
+        }else if(puppet.testL2Shape(shape)){
+            uint8_t f = puppet.getL2Shape(found_shape) == 2? 2: !puppet.getL2Shape(found_shape);
+            if(!puppet.testTurn(shape,f,0)&&!puppet.testTurn(shape,f,2)){
+                flag = 3;
+                std::cout << "#L2";
+            }
+        }else if(puppet.testL4Shape(shape)){
+            uint8_t f = puppet.getL4Shape(found_shape) == 2? 2: !puppet.getL4Shape(found_shape);
+            if(!puppet.testTurn(shape,f,0)&&!puppet.testTurn(shape,f,2)){
+                flag = 3;
+                std::cout << "#L4";
             }
         }else if(puppet.testLBShape(shape)){
             flag = 3;
             std::cout << "#R";
-        }
+        }*/
+        Puppet::ShapeBin mir1;
+        Puppet::ShapeBin mir2;
+        Puppet::ShapeBin mir3;
+        memcpy(mir1.data, found_shape.data, sizeof(Puppet::ShapeBin::data));
+        memcpy(mir2.data, found_shape.data, sizeof(Puppet::ShapeBin::data));
+        memcpy(mir3.data, found_shape.data, sizeof(Puppet::ShapeBin::data));
+        puppet.mirrorShapeBin(mir1, 0);
+        puppet.mirrorShapeBin(mir2, 1);
+        puppet.mirrorShapeBin(mir3, 2);
+        if(memcmp(mir1.data, found_shape.data, sizeof(Puppet::ShapeBin::data)) == 0 ||
+            memcmp(mir2.data, found_shape.data, sizeof(Puppet::ShapeBin::data)) == 0 ||
+            memcmp(mir3.data, found_shape.data, sizeof(Puppet::ShapeBin::data)) == 0){
+                std::cout << " #sym";
+            }
         std::cout << std::endl;
         if(flag > 0){
             auto fullalg = searchToLayer(Lshapes[i].first, flag);

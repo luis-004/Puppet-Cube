@@ -317,6 +317,69 @@ bool Puppet::testU2VShape(const Shape& shape){
     return ret;
 }
 
+bool Puppet::test90VShape(const Shape& shape){
+    bool ret = 1;
+    uint8_t y = 4;
+    uint8_t x;
+    uint8_t z;
+    for(x = 1; x < 5; ++x){
+        for(z = 0; z < 4; ++z){
+            if((x==4||z==0) && shape.data[x][y][z] == 0){
+                ret=0;
+            }
+        }
+    }
+    if(ret == 1){return true;}
+    ret = 1;
+    for(x = 0; x < 4; ++x){
+        for(z = 1; z < 5; ++z){
+            if((x==0||z==4) && shape.data[x][y][z] == 0){
+                ret=0;
+            }
+        }
+    }
+    if(ret == 1){return true;}
+    ret = 1;
+    x = 4;
+    for(y = 0; y < 4; ++y){
+        for(z = 1; z < 5; ++z){
+            if((y==0||z==4) && shape.data[x][y][z] == 0){
+                ret=0;
+            }
+        }
+    }
+    if(ret == 1){return true;}
+    ret = 1;
+    for(y = 1; y < 5; ++y){
+        for(z = 0; z < 4; ++z){
+            if((y==4||z==0) && shape.data[x][y][z] == 0){
+                ret=0;
+            }
+        }
+    }
+    if(ret == 1){return true;}
+    ret = 1;
+    z = 4;
+    for(x = 0; x < 4; ++x){
+        for(y = 1; y < 5; ++y){
+                if((y==4||x==0) && shape.data[x][y][z] == 0){
+                    ret=0;
+                }
+        }
+    }
+    if(ret == 1){return true;}
+    ret = 1;
+    for(x = 1; x < 5; ++x){
+        for(y = 0; y < 4; ++y){
+                if((y==0||x==4) && shape.data[x][y][z] == 0){
+                    ret=0;
+                }
+        }
+    }
+    return ret;
+}
+
+
 bool Puppet::testBShape(const Shape& shape){
     bool ret = 1;
     uint8_t y;
@@ -595,6 +658,258 @@ bool Puppet::testLBShape(const Shape& shape){
     return false;
 }
 
+bool Puppet::testL1Shape(const Shape& shape){
+    uint8_t y = 4;
+    uint8_t x;
+    uint8_t z;
+    for(x = 1; x < 5; ++x){
+        for(z = 1; z < 5; ++z){
+            if((x>=3||z<=2) && shape.data[x][y][z] == 0){
+                goto s2;
+            }
+        }
+    }
+    return true;
+    s2:
+    for(z = 1; z < 5; ++z){
+        for(x = 1; x < 5; ++x){
+            if((z>=3||x<=2) && shape.data[x][y][z] == 0){
+                goto s3;
+            }
+        }
+    }
+    return true;
+    s3:
+    x = 4;
+    for(y = 1; y < 5; ++y){
+        for(z = 1; z < 5; ++z){
+            if((y>=3||z<=2) && shape.data[x][y][z] == 0){
+                goto s4;
+            }
+        }
+    }
+    return true;
+    s4:
+    for(z = 1; z < 5; ++z){
+        for(y = 1; y < 5; ++y){
+            if((z>=3||y>=2) && shape.data[x][y][z] == 0){
+                goto s5;
+            }
+        }
+    }
+    return true;
+    s5:
+    z = 4;
+    for(y = 1; y < 5; ++y){
+        for(x = 1; x < 5; ++x){
+            if((y>=3||x<=2) && shape.data[x][y][z] == 0){
+                goto s6;
+            }
+        }
+    }
+    return true;
+    s6:
+    for(x = 1; x < 5; ++x){
+        for(y = 1; y < 5; ++y){
+            if((x>=3||y<=2) && shape.data[x][y][z] == 0){
+                goto end;
+            }
+        }
+    }
+    return true;
+    end:
+    return false;
+}
+
+bool Puppet::testL2Shape(const Shape& shape){
+    uint8_t y = 4;
+    uint8_t x;
+    uint8_t z;
+    for(x = 0; x < 4; ++x){
+        for(z = 1; z < 5; ++z){
+            if((x<=1||z<=2) && shape.data[x][y][z] == 0){
+                goto s2;
+            }
+        }
+    }
+    return true;
+    s2:
+    for(z = 0; z < 4; ++z){
+        for(x = 1; x < 5; ++x){
+            if((z<=1||x<=2) && shape.data[x][y][z] == 0){
+                goto s3;
+            }
+        }
+    }
+    return true;
+    s3:
+    x = 4;
+    for(y = 0; y < 4; ++y){
+        for(z = 1; z < 5; ++z){
+            if((y<=1||z<=2) && shape.data[x][y][z] == 0){
+                goto s4;
+            }
+        }
+    }
+    return true;
+    s4:
+    for(z = 0; z < 4; ++z){
+        for(y = 1; y < 5; ++y){
+            if((z<=1||y<=2) && shape.data[x][y][z] == 0){
+                goto s5;
+            }
+        }
+    }
+    return true;
+    s5:
+    z = 4;
+    for(y = 0; y < 4; ++y){
+        for(x = 1; x < 5; ++x){
+            if((y<=1||x<=2) && shape.data[x][y][z] == 0){
+                goto s6;
+            }
+        }
+    }
+    return true;
+    s6:
+    for(x = 0; x < 4; ++x){
+        for(y = 1; y < 5; ++y){
+            if((x<=1||y<=2) && shape.data[x][y][z] == 0){
+                goto end;
+            }
+        }
+    }
+    return true;
+    end:
+    return false;
+}
+
+bool Puppet::testL3Shape(const Shape& shape){
+    uint8_t y = 4;
+    uint8_t x;
+    uint8_t z;
+    for(x = 0; x < 4; ++x){
+        for(z = 0; z < 4; ++z){
+            if((x>=2||z<=1) && shape.data[x][y][z] == 0){
+                goto s2;
+            }
+        }
+    }
+    return true;
+    s2:
+    for(z = 0; z < 4; ++z){
+        for(x = 0; x < 4; ++x){
+            if((z>=2||x<=1) && shape.data[x][y][z] == 0){
+                goto s3;
+            }
+        }
+    }
+    return true;
+    s3:
+    x = 4;
+    for(y = 0; y < 4; ++y){
+        for(z = 0; z < 4; ++z){
+            if((y>=2||z<=1) && shape.data[x][y][z] == 0){
+                goto s4;
+            }
+        }
+    }
+    return true;
+    s4:
+    for(z = 0; z < 4; ++z){
+        for(y = 0; y < 4; ++y){
+            if((z>=2||y<=1) && shape.data[x][y][z] == 0){
+                goto s5;
+            }
+        }
+    }
+    return true;
+    s5:
+    z = 4;
+    for(y = 0; y < 4; ++y){
+        for(x = 0; x < 4; ++x){
+            if((y>=2||x<=1) && shape.data[x][y][z] == 0){
+                goto s6;
+            }
+        }
+    }
+    return true;
+    s6:
+    for(x = 0; x < 4; ++x){
+        for(y = 0; y < 4; ++y){
+            if((x>=2||y<=1) && shape.data[x][y][z] == 0){
+                goto end;
+            }
+        }
+    }
+    return true;
+    end:
+    return false;
+}
+
+bool Puppet::testL4Shape(const Shape& shape){
+    uint8_t y = 4;
+    uint8_t x;
+    uint8_t z;
+    for(x = 0; x < 4; ++x){
+        for(z = 1; z < 5; ++z){
+            if((x>=2||z>=3) && shape.data[x][y][z] == 0){
+                goto s2;
+            }
+        }
+    }
+    return true;
+    s2:
+    for(z = 0; z < 4; ++z){
+        for(x = 1; x < 5; ++x){
+            if((z>=2||x>=3) && shape.data[x][y][z] == 0){
+                goto s3;
+            }
+        }
+    }
+    return true;
+    s3:
+    x = 4;
+    for(y = 0; y < 4; ++y){
+        for(z = 1; z < 5; ++z){
+            if((y>=2||z>=3) && shape.data[x][y][z] == 0){
+                goto s4;
+            }
+        }
+    }
+    return true;
+    s4:
+    for(z = 0; z < 4; ++z){
+        for(y = 1; y < 5; ++y){
+            if((z>=2||y>=3) && shape.data[x][y][z] == 0){
+                goto s5;
+            }
+        }
+    }
+    return true;
+    s5:
+    z = 4;
+    for(y = 0; y < 4; ++y){
+        for(x = 1; x < 5; ++x){
+            if((y>=2||x>=3) && shape.data[x][y][z] == 0){
+                goto s6;
+            }
+        }
+    }
+    return true;
+    s6:
+    for(x = 0; x < 4; ++x){
+        for(y = 1; y < 5; ++y){
+            if((x>=2||y>=3) && shape.data[x][y][z] == 0){
+                goto end;
+            }
+        }
+    }
+    return true;
+    end:
+    return false;
+}
+
 int Puppet::getVShape(const ShapeBin& shape){
     bool ret = 1;
     uint8_t y = 4;
@@ -700,6 +1015,321 @@ int Puppet::getU2VShape(const ShapeBin& shape){
         }
     }
     if(ret == 1){return 2;}
+    return -1;
+}
+
+int Puppet::get90VShape(const ShapeBin& shape){
+    bool ret = 1;
+    uint8_t y = 4;
+    uint8_t x;
+    uint8_t z;
+    for(x = 1; x < 5; ++x){
+        for(z = 0; z < 4; ++z){
+            if((x==4||z==0) && shape.data[x][y][z] == 0){
+                ret=0;
+            }
+        }
+    }
+    if(ret == 1){return 0;}
+    ret = 1;
+    for(x = 0; x < 4; ++x){
+        for(z = 1; z < 5; ++z){
+            if((x==0||z==4) && shape.data[x][y][z] == 0){
+                ret=0;
+            }
+        }
+    }
+    if(ret == 1){return 0;}
+    ret = 1;
+    x = 4;
+    for(y = 0; y < 4; ++y){
+        for(z = 1; z < 5; ++z){
+            if((y==0||z==4) && shape.data[x][y][z] == 0){
+                ret=0;
+            }
+        }
+    }
+    if(ret == 1){return 1;}
+    ret = 1;
+    for(y = 1; y < 5; ++y){
+        for(z = 0; z < 4; ++z){
+            if((y==4||z==0) && shape.data[x][y][z] == 0){
+                ret=0;
+            }
+        }
+    }
+    if(ret == 1){return 1;}
+    ret = 1;
+    z = 4;
+    for(x = 0; x < 4; ++x){
+        for(y = 1; y < 5; ++y){
+                if((y==4||x==0) && shape.data[x][y][z] == 0){
+                    ret=0;
+                }
+        }
+    }
+    if(ret == 1){return 2;}
+    ret = 1;
+    for(x = 1; x < 5; ++x){
+        for(y = 0; y < 4; ++y){
+                if((y==0||x==4) && shape.data[x][y][z] == 0){
+                    ret=0;
+                }
+        }
+    }
+    if(ret == 1){return 2;}
+    return -1;
+}
+
+int Puppet::getL1Shape(const ShapeBin& shape){
+    uint8_t y = 4;
+    uint8_t x;
+    uint8_t z;
+    for(x = 1; x < 5; ++x){
+        for(z = 1; z < 5; ++z){
+            if((x==4||z==1) && shape.data[x][y][z] == 0){
+                goto s2;
+            }
+        }
+    }
+    return 0;
+    s2:
+    for(z = 1; z < 5; ++z){
+        for(x = 1; x < 5; ++x){
+            if((z==4||x==1) && shape.data[x][y][z] == 0){
+                goto s3;
+            }
+        }
+    }
+    return 0;
+    s3:
+    x = 4;
+    for(y = 1; y < 5; ++y){
+        for(z = 1; z < 5; ++z){
+            if((y==4||z==1) && shape.data[x][y][z] == 0){
+                goto s4;
+            }
+        }
+    }
+    return 1;
+    s4:
+    for(z = 1; z < 5; ++z){
+        for(y = 1; y < 5; ++y){
+            if((z==4||y==1) && shape.data[x][y][z] == 0){
+                goto s5;
+            }
+        }
+    }
+    return 1;
+    s5:
+    z = 4;
+    for(y = 1; y < 5; ++y){
+        for(x = 1; x < 5; ++x){
+            if((y==4||x==1) && shape.data[x][y][z] == 0){
+                goto s6;
+            }
+        }
+    }
+    return 2;
+    s6:
+    for(x = 1; x < 5; ++x){
+        for(y = 1; y < 5; ++y){
+            if((x==4||y==1) && shape.data[x][y][z] == 0){
+                goto end;
+            }
+        }
+    }
+    return 2;
+    end:
+    return -1;
+}
+
+int Puppet::getL2Shape(const ShapeBin& shape){
+    uint8_t y = 4;
+    uint8_t x;
+    uint8_t z;
+    for(x = 0; x < 4; ++x){
+        for(z = 1; z < 5; ++z){
+            if((x==0||z==1) && shape.data[x][y][z] == 0){
+                goto s2;
+            }
+        }
+    }
+    return 0;
+    s2:
+    for(z = 0; z < 4; ++z){
+        for(x = 1; x < 5; ++x){
+            if((z==0||x==1) && shape.data[x][y][z] == 0){
+                goto s3;
+            }
+        }
+    }
+    return 0;
+    s3:
+    x = 4;
+    for(y = 0; y < 4; ++y){
+        for(z = 1; z < 5; ++z){
+            if((y==0||z==1) && shape.data[x][y][z] == 0){
+                goto s4;
+            }
+        }
+    }
+    return 1;
+    s4:
+    for(z = 0; z < 4; ++z){
+        for(y = 1; y < 5; ++y){
+            if((z==0||y==1) && shape.data[x][y][z] == 0){
+                goto s5;
+            }
+        }
+    }
+    return 1;
+    s5:
+    z = 4;
+    for(y = 0; y < 4; ++y){
+        for(x = 1; x < 5; ++x){
+            if((y==0||x==1) && shape.data[x][y][z] == 0){
+                goto s6;
+            }
+        }
+    }
+    return 2;
+    s6:
+    for(x = 0; x < 4; ++x){
+        for(y = 1; y < 5; ++y){
+            if((x==0||y==1) && shape.data[x][y][z] == 0){
+                goto end;
+            }
+        }
+    }
+    return 2;
+    end:
+    return -1;
+}
+
+int Puppet::getL3Shape(const ShapeBin& shape){
+    uint8_t y = 4;
+    uint8_t x;
+    uint8_t z;
+    for(x = 0; x < 4; ++x){
+        for(z = 0; z < 4; ++z){
+            if((x==3||z==0) && shape.data[x][y][z] == 0){
+                goto s2;
+            }
+        }
+    }
+    return 0;
+    s2:
+    for(z = 0; z < 4; ++z){
+        for(x = 0; x < 4; ++x){
+            if((z==3||x==0) && shape.data[x][y][z] == 0){
+                goto s3;
+            }
+        }
+    }
+    return 0;
+    s3:
+    x = 4;
+    for(y = 0; y < 4; ++y){
+        for(z = 0; z < 4; ++z){
+            if((y==3||z==0) && shape.data[x][y][z] == 0){
+                goto s4;
+            }
+        }
+    }
+    return 1;
+    s4:
+    for(z = 0; z < 4; ++z){
+        for(y = 0; y < 4; ++y){
+            if((z==3||y==0) && shape.data[x][y][z] == 0){
+                goto s5;
+            }
+        }
+    }
+    return 1;
+    s5:
+    z = 4;
+    for(y = 0; y < 4; ++y){
+        for(x = 0; x < 4; ++x){
+            if((y==3||x==0) && shape.data[x][y][z] == 0){
+                goto s6;
+            }
+        }
+    }
+    return 2;
+    s6:
+    for(x = 0; x < 4; ++x){
+        for(y = 0; y < 4; ++y){
+            if((x==3||y==0) && shape.data[x][y][z] == 0){
+                goto end;
+            }
+        }
+    }
+    return 2;
+    end:
+    return -1;
+}
+
+int Puppet::getL4Shape(const ShapeBin& shape){
+    uint8_t y = 4;
+    uint8_t x;
+    uint8_t z;
+    for(x = 0; x < 4; ++x){
+        for(z = 1; z < 5; ++z){
+            if((x==3||z==4) && shape.data[x][y][z] == 0){
+                goto s2;
+            }
+        }
+    }
+    return 0;
+    s2:
+    for(z = 0; z < 4; ++z){
+        for(x = 1; x < 5; ++x){
+            if((z==3||x==4) && shape.data[x][y][z] == 0){
+                goto s3;
+            }
+        }
+    }
+    return 0;
+    s3:
+    x = 4;
+    for(y = 0; y < 4; ++y){
+        for(z = 1; z < 5; ++z){
+            if((y==3||z==4) && shape.data[x][y][z] == 0){
+                goto s4;
+            }
+        }
+    }
+    return 1;
+    s4:
+    for(z = 0; z < 4; ++z){
+        for(y = 1; y < 5; ++y){
+            if((z==3||y==4) && shape.data[x][y][z] == 0){
+                goto s5;
+            }
+        }
+    }
+    return 1;
+    s5:
+    z = 4;
+    for(y = 0; y < 4; ++y){
+        for(x = 1; x < 5; ++x){
+            if((y==3||x==4) && shape.data[x][y][z] == 0){
+                goto s6;
+            }
+        }
+    }
+    return 2;
+    s6:
+    for(x = 0; x < 4; ++x){
+        for(y = 1; y < 5; ++y){
+            if((x==3||y==4) && shape.data[x][y][z] == 0){
+                goto end;
+            }
+        }
+    }
+    return 2;
+    end:
     return -1;
 }
 

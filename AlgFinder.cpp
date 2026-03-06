@@ -1146,7 +1146,7 @@ void AlgFinder::searchShape(std::string algStr, uint8_t max_turns, uint8_t max_c
         }
         if(alg.size() > num_turns){
             num_turns = alg.size();
-            //std::cout << int(num_turns + 1) << std::endl;
+            std::cout << int(num_turns + 1) << std::endl;
         }
     }
 }
@@ -1711,25 +1711,25 @@ void AlgFinder::searchAllShapes(){
     }
     /*AlgFinderExt ext;
     std::vector<std::pair<Puppet::Shape, std::vector<std::array<uint8_t, 2>>>> Lshapes = ext.searchShapes();
-    //std::vector<std::array<uint8_t, 2>> alg = am.translateYX2(am.translateBack("FR2FUFU2FR2F'UF2U'R2FR2"));
-    for(int i = 0; i < Lshapes.size(); i++){
-        /*puppet.cubeShape(shape);
-        for(auto turn : s.second){
-            if(!puppet.doTurn(shape, turn[0], turn[1])){
-                std::cout << "no valid alg" << std::endl;
-                return;
-            }
+    std::vector<std::array<uint8_t, 2>> alg2 = am.translateYX2(am.translateBack("F'U'R2U2F2U'R'F'"));
+    puppet.cubeShape(shape);
+    for(auto turn : alg2){
+        if(!puppet.doTurn(shape, turn[0], turn[1])){
+            std::cout << "no valid alg" << std::endl;
+            return;
         }
-        found_shape = puppet.getBinShape(Lshapes[i].first); 
+    }
+    found_shape = puppet.getBinShape(shape); 
+    for(int i = 0; i < Lshapes.size(); i++){
         for(uint16_t i = 0; i < found_shapes.size(); i++){
             if(std::memcmp(found_shapes[i].data, found_shape.data, sizeof(Puppet::ShapeBin::data)) == 0){
-                //std::cout << "alg is at " << int(std::floor(i/6)) <<std::endl;
+                std::cout << "alg is at " << int(std::floor(i/6)) <<std::endl;
                 goto found;
             }
         }
         std::cout <<i<< " not found" <<std::endl;
-        found: ;
-    }*/
+    }
+    found: ;*/
 }
 
 void AlgFinder::searchFlips(uint8_t max_turns){

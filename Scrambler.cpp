@@ -111,6 +111,81 @@ std::vector<Puppet::ShapeBin> Scrambler::computeAllShapes(){
     return found_shapes;
 }
 
+std::vector<Puppet::ShapeBin> Scrambler::computeVShapes(){
+    Puppet::Shape shape;
+    uint8_t last_turn = 0;
+    std::queue<std::vector<std::array<uint8_t, 2>>> algs;
+    Puppet::ShapeBin found_shape;
+    std::vector<Puppet::ShapeBin> found_shapes;
+    std::vector<Puppet::ShapeBin> V_shapes;
+    algs.push({{0,0}});
+    algs.push({{0,1}});
+    while(true){
+        puppet.cubeShape(shape);
+        std::vector<std::array<uint8_t, 2>> alg;
+        if(!algs.empty()){
+            alg = algs.front();
+        }else{
+            break;
+        }
+        algs.pop();
+        for(auto turn : alg){
+            puppet.doTurn(shape, turn[0], turn[1]);
+        }
+        last_turn = alg.back()[0];
+        for(uint8_t face = 0; face < 3; ++face){
+            if(face == last_turn){continue;}
+            bool HT_possible = false;
+            bool hit = false;
+            for(uint8_t t = 2; t < 5; t++){
+                if((HT_possible || t != 4) && puppet.doTurn(shape, face, t % 3)){
+                    alg.push_back({face, uint8_t(t % 3)});
+                    found_shape = puppet.getBinShape(shape); 
+                    hit = true;
+                    for(uint16_t i = 0; i < found_shapes.size(); i++){
+                        if(std::memcmp(found_shapes[i].data, found_shape.data, sizeof(Puppet::ShapeBin::data)) == 0){
+                            hit = false;
+                            break;
+                        }
+                    }
+                    if(hit){
+                        algs.push(alg);
+                        found_shapes.push_back(found_shape);
+                        if(puppet.testVShape(shape)) {
+                            uint8_t f = puppet.getVShape(found_shape) == 2? 2: !puppet.getVShape(found_shape);
+                            if(!puppet.testTurn(shape,f,0) || !puppet.testTurn(shape,f,2) || !puppet.testTurn(shape,f,1)){
+                                V_shapes.push_back(found_shape);
+                            }
+                        }else if(puppet.testU2VShape(shape)){
+                            uint8_t f = puppet.getU2VShape(found_shape) == 2? 2: !puppet.getU2VShape(found_shape);
+                            if(!puppet.testTurn(shape,f,0) || !puppet.testTurn(shape,f,2) || !puppet.testTurn(shape,f,1)){
+                                V_shapes.push_back(found_shape);
+                            }
+                        }else if(puppet.test90VShape(shape)){
+                            uint8_t f = puppet.get90VShape(found_shape) == 2? 2: !puppet.get90VShape(found_shape);
+                            if(!puppet.testTurn(shape,f,0) || !puppet.testTurn(shape,f,2) || !puppet.testTurn(shape,f,1)){
+                                V_shapes.push_back(found_shape);
+                            }
+                        }
+                        /*if(!puppet.testLayer(shape)){
+                            if(puppet.testVShape(shape)){
+                                uint8_t f = puppet.getVShape(found_shape) == 2? 2: !puppet.getVShape(found_shape);
+                                if(puppet.testTurn(shape,f,0) && puppet.testTurn(shape,f,2) && puppet.testTurn(shape,f,1)){
+                                    V_shapes.push_back(found_shape);
+                                }
+                            }
+                        }*/
+                    }
+                    alg.pop_back();
+                    puppet.doTurn(shape, face, 2 - (t % 3));
+                    HT_possible = true;
+                }
+            }
+        }
+    }
+    return V_shapes;
+}
+
 auto Scrambler::findShapeFromShape(const Puppet::Shape& start, const Puppet::ShapeBin& end){
     Puppet::Shape shape;
     int8_t last_turn = -1;

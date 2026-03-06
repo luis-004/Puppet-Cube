@@ -28,7 +28,7 @@ int main()
     Puppet::Corners corners;
     Puppet::Flips flips;
     std::string input;
-    /*std::vector<Puppet::ShapeBin> shapes = S.computeAllShapes();
+    std::vector<Puppet::ShapeBin> shapes = S.computeVShapes();
     auto scramble = S.RandomShape(40,shapes);
     std::cout << "Ready" << std::endl;
     uint16_t count = 0;
@@ -39,6 +39,16 @@ int main()
         if (input == "c") system("cls");
         //system("cls");
         scramble = S.RandomShape(40,shapes);
+    }
+    /*
+    uint16_t count = 0;
+    while(true){
+        std::getline(std::cin, input);
+        auto scramble = S.RMS(40);
+        std::cout << ++count << " " << am.translateRightie(am.translateYX2(scramble));
+        if (input == "q") break;
+        if (input == "c") system("cls");
+        //system("cls");
     }*/
     //std::cout << am.translateRightie(am.reverse(std::vector<std::array<uint8_t, 2>> {}));
     //std::cout << am.translateLeftie(am.swap(am.translateBack("URU2R'F'U'F'R2FRF'RFUF2U'R'URU2R'U'"), 2)) << std::endl;
@@ -47,8 +57,8 @@ int main()
     //std::cout << am.translateRightie(am.reverse(am.swap(am.translateBack("U2R'F'UFRU2R'U'RFR2F'U2"), 2))) << std::endl;
     //algfinder.searchCubeShapeL(13);
     //std::cout << am.translateRightie(am.translateYX2(am.translateBack("RU'R2UR2U2R2F2R2U2R2F2U'R2UR'"))) << std::endl;
-    ext.printLtoLayer();
-    //ext.searchFlipsFast(8);
+    //ext.printLtoLayer();
+    //ext.searchFlipsFast(10,0);
     // algfinder.searchCubeShapeL(13);
     //algfinder.searchAllShapes();
     //algfinder.searchShape("RU'FR2U'R'FURU'RF2R'", 14, 5);
@@ -58,7 +68,7 @@ int main()
     //algfinder.searchCubeShapeLB(10);
     // algfinder.searchCornerCase("URUR'FU'R2UR'F2RU2",13);
     // std::cout << am.translateRightie(am.swap(am.translateBack("U'R'F2RU2RF'R'FRUR"), 0)) << std::endl;
-    // algfinder.searchShape("R'FR'U'R2FU'", 10);
+    //algfinder.searchAllShapes();
     /*std::cout << am.translateRightie(am.twist(am.translateBack("RUR2U'F'R"), 0)) << std::endl;
     std::cout << am.translateRightie(am.twist(am.translateBack("RUR2U'F'R"), 1)) << std::endl;
     std::cout << am.translateRightie(am.twist(am.swap(am.translateBack("RUR2U'F'R"), 1), 0)) << std::endl;
