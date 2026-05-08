@@ -1,15 +1,15 @@
 #include "Scrambler.hpp"
 
-std::vector<std::array<uint8_t, 2>> Scrambler::RMS(uint8_t movecount){
+std::vector<std::array<uint8_t, 2>> Scrambler::RMS(uint16_t movecount){
     //Puppet puppet;
     Puppet::Shape shape;
     //AlgMani am;
     std::random_device rd;
     std::mt19937 gen(rd());
     std::array<std::array<uint8_t, 2>, 9> turns = {{{0,0},{0,1},{0,2},{1,0},{1,1},{1,2},{2,0},{2,1},{2,2}}};
-    std::vector<std::array<uint8_t, 2>> valid_turns;
+    std::vector<std::array<uint8_t, 2>> valid_turns = {};
     std::vector<std::vector<std::array<uint8_t, 2>>> impossible_turns;
-    std::vector<std::array<uint8_t, 2>> scramble;
+    std::vector<std::array<uint8_t, 2>> scramble= {};
     bool impossible;
     uint8_t length;
     length = 0;
@@ -255,6 +255,38 @@ std::vector<std::array<uint8_t, 2>> Scrambler::RandomShape(uint8_t movecount, st
     Puppet::ShapeBin randShape;
     std::memcpy(randShape.data, allShapes[pick(gen)].data, sizeof(Puppet::ShapeBin::data));
     auto alg = findShapeFromShape(shape, randShape);
+    again:
+    if(alg.empty()){
+        return scramble;
+    }
+    if(scramble.empty()){
+        return alg;
+    }
+    if(scramble.back()[0] == alg[0][0]){
+        int8_t dir = (2+alg[0][1] + scramble.back()[1])%4-1;
+        if(dir == -1){
+            alg = am.reverse(alg);
+            alg.pop_back();
+            alg = am.reverse(alg);
+            scramble.pop_back();
+            goto again;
+        }
+        alg = am.reverse(alg);
+        scramble.pop_back();
+        scramble.push_back({alg.back()[0], (uint8_t)dir});
+        alg.pop_back();
+        alg = am.reverse(alg);
+    }
+    scramble.insert(scramble.end(),alg.begin(),alg.end());
+    return scramble;
+}
+
+std::vector<std::array<uint8_t, 2>> Scrambler::ScrambleWithShape(uint8_t movecount, Puppet::ShapeBin goal){
+    auto scramble = RMS(movecount);
+    Puppet::Shape shape;
+    puppet.cubeShape(shape);
+    puppet.doAlgExpectPossible(shape, scramble);
+    auto alg = findShapeFromShape(shape, goal);
     again:
     if(alg.empty()){
         return scramble;

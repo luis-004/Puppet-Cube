@@ -146,8 +146,10 @@ void AlgFinderExt::searchFlipsFast(uint8_t max_turns, bool odd){
                 for(auto n : pair.second){
                     std::cout << int(n);
                 }
-                std::cout << " ";
                 puppet.printFlippedEdges(puppet.getFlips(flips));
+                if(pair.second[2] == 0){
+                    std::cout << " 2G" ;
+                }
                 std::cout << std::endl;
                 new_algs.push_back(alg);
                 new_algs.push_back((am.twist(alg,0)));

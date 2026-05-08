@@ -1,0 +1,40 @@
+R'U2F'RFR'UR2UF'UF2U'R'URUF'R2U'FU2FR'U2R2U'RF2R2FU'FUF'R2FU'R'F2R'FR'F'UR'U'RF2R'F2R2F'RUR2U'FU'F'
+Heuristic value of solved state:
+0
+Heuristic value of start state:
+20
+running A* with Shape Heuristics...
+switched to next queue. best case: 20 val: 15
+time: 0.0010735
+switched to next queue. best case: 20 val: 15
+time: 0.0018651
+switched to next queue. best case: 20 val: 15
+time: 0.0027264
+switched to next queue. best case: 20 val: 15
+time: 0.0039479
+switched to next queue. best case: 20 val: 15
+time: 0.0065263
+switched to next queue. best case: 20 val: 15
+time: 0.0149959
+switched to next queue. best case: 26 val: 12
+time: 0.023506
+switched to next queue. best case: 26 val: 12
+time: 0.0519665
+switched to next queue. best case: 28 val: 10
+time: 0.118167
+switched to next queue. best case: 29 val: 9
+time: 0.300139
+switched to next queue. best case: 29 val: 9
+time: 0.812984
+switched to next queue. best case: 31 val: 8
+time: 2.28191
+switched to next queue. best case: 31 val: 8
+time: 6.5514
+switched to next queue. best case: 33 val: 7
+time: 18.1619
+solution found. time: 45.0278
+FU'F'RF2R'U'RF'U2FR2U2FR2F'RFU'FR'FR'U2R2F2R2U'FU2R'U'RU2 34
+found[0]: 1107857
+found[1]: 66576
+found[2]: 90256
+A* finished

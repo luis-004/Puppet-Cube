@@ -9,14 +9,69 @@
 				"-fdiagnostics-color=always",
 				//"-mconsole",
 				"-g",
-				"${fileDirname}/Main.cpp",  
+				"${fileDirname}/Main.cpp",    
                 "${fileDirname}/Puppet.cpp",
                 "${fileDirname}/AlgFinder.cpp",
 				"${fileDirname}/AlgFinderExt.cpp",
 				"${fileDirname}/AlgMani.cpp",
 				"${fileDirname}/Scrambler.cpp",
+				"${fileDirname}/Astar.cpp",
 				"-o",
 				"${fileDirname}/Main.exe"
+			],
+			"options": {
+				"cwd": "C:/msys64/mingw64/bin"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "compiler: C:/msys64/mingw64/bin/g++.exe"
+		},
+		{
+			"type": "cppbuild",
+			"label": "Build Main",
+			"command": "C:/msys64/mingw64/bin/g++.exe",
+			"args": [
+				"-fdiagnostics-color=always",
+				//"-mconsole",
+				"-g",
+				"${fileDirname}/Main.cpp",    
+                "${fileDirname}/Puppet.cpp",
+                "${fileDirname}/AlgFinder.cpp",
+				"${fileDirname}/AlgFinderExt.cpp",
+				"${fileDirname}/AlgMani.cpp",
+				"${fileDirname}/Scrambler.cpp",
+				"${fileDirname}/Astar.cpp",
+				"-o",
+				"${fileDirname}/Main.exe"
+			],
+			"options": {
+				"cwd": "C:/msys64/mingw64/bin"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "compiler: C:/msys64/mingw64/bin/g++.exe"
+		},
+		{
+			"type": "cppbuild",
+			"label": "Build RSS",
+			"command": "C:/msys64/mingw64/bin/g++.exe",
+			"args": [
+				"-fdiagnostics-color=always",
+				//"-mconsole",
+				"-g",
+				"${fileDirname}/RSS.cpp",    
+                "${fileDirname}/Puppet.cpp",
+                "${fileDirname}/AlgFinder.cpp",
+				"${fileDirname}/AlgFinderExt.cpp",
+				"${fileDirname}/AlgMani.cpp",
+				"${fileDirname}/Scrambler.cpp",
+				"${fileDirname}/Astar.cpp",
+				"-o",
+				"${fileDirname}/RSS.exe"
 			],
 			"options": {
 				"cwd": "C:/msys64/mingw64/bin"
@@ -39,3 +94,51 @@
 		}
 	]
 }
+
+/*{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "Build Main - DEBUG",
+            "command": "C:/msys64/mingw64/bin/g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "-O0",
+                "${fileDirname}/Main.cpp", // Nur Main.cpp als Einstieg
+                "${fileDirname}/Puppet.cpp",
+                "${fileDirname}/AlgFinder.cpp",
+                "${fileDirname}/AlgFinderExt.cpp",
+                "${fileDirname}/AlgMani.cpp",
+                "${fileDirname}/Scrambler.cpp",
+                "${fileDirname}/Astar.cpp",
+                "-o",
+                "${fileDirname}/Main_debug.exe"
+            ],
+            "options": { "cwd": "C:/msys64/mingw64/bin" },
+            "group": "build"
+        },
+        {
+            "type": "cppbuild",
+            "label": "Build RSS - RELEASE",
+            "command": "C:/msys64/mingw64/bin/g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-O3",
+                "-DNDEBUG",
+                "${fileDirname}/RSS.cpp", // Nutzt RSS.cpp als Einstiegspunkt
+                "${fileDirname}/Puppet.cpp",
+                "${fileDirname}/AlgFinder.cpp",
+                "${fileDirname}/AlgFinderExt.cpp",
+                "${fileDirname}/AlgMani.cpp",
+                "${fileDirname}/Scrambler.cpp",
+                "${fileDirname}/Astar.cpp",
+                "-o",
+                "${fileDirname}/RSS.exe" // Benennt die Datei RSS.exe
+            ],
+            "options": { "cwd": "C:/msys64/mingw64/bin" },
+            "group": "build"
+        }
+    ]
+}*/

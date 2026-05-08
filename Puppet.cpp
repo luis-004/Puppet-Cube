@@ -31,6 +31,7 @@ Puppet::ShapeBin Puppet::getBinShape(const Shape& shape){
     }
     return shapebin;
 }
+
 void Puppet::rotateShapeBin(ShapeBin& shape, bool dir){
     uint8_t curShape[5][5][5];
     std::memcpy(curShape, shape.data, sizeof(shape.data));
@@ -1479,7 +1480,7 @@ void Puppet::rotateCornersCS(Corners& corners, bool dir){
     }
     if(stay != 6 && stay != 0 ){
         corners.data[(stay + dir) % 3] =  (stay + dir) % 3;
-        corners.data[(stay + dir +1 ) % 3] =  (stay + dir - 1) % 3;
+        corners.data[(stay + dir + 1) % 3] =  (stay + dir - 1) % 3;
         corners.data[(stay + dir - 1) % 3] =  (stay + dir + 1) % 3;
     }
     swaps = {corners.data[3],corners.data[4],corners.data[5]};
@@ -1495,7 +1496,7 @@ void Puppet::rotateCornersCS(Corners& corners, bool dir){
         corners.data[(stay + dir - 1) % 3 + 3] =  (stay + dir + 1) % 3 + 3;
     }
 }
-void Puppet::mirrorCornersCS(Corners& corners){
+void Puppet::mirrorCornersCS(Corners& corners){ //glaub is kaputt
     std::array<uint8_t, 3> swaps = {corners.data[0],corners.data[1],corners.data[2]};
     uint8_t stay = 0;
     for(uint8_t i = 0; i<3; ++i){
@@ -1521,11 +1522,71 @@ void Puppet::mirrorCornersCS(Corners& corners){
         corners.data[5] = 7 - corners.data[5];  
     }
 }
+
+void Puppet::rotateCorners(Corners& corners){
+    uint8_t buf[7];
+    std::memcpy(buf, corners.data, 7);
+    corners.data[0] = buf[2];
+    corners.data[1] = buf[0];
+    corners.data[2] = buf[1];
+    corners.data[3] = buf[5];
+    corners.data[4] = buf[3];
+    corners.data[5] = buf[4];
+    for(uint8_t i = 0; i < 7; i++){
+        switch (corners.data[i]){
+        case 0:
+            corners.data[i] = 1;
+            break;
+        case 1:
+            corners.data[i] = 2;
+            break;
+        case 2:
+            corners.data[i] = 0;
+            break;
+        case 3:
+            corners.data[i] = 4;
+            break;
+        case 4:
+            corners.data[i] = 5;
+            break;
+        case 5:
+            corners.data[i] = 3;
+            break;
+        }
+    }
+}
+
+void Puppet::mirrorCorners(Corners& corners){
+    uint8_t buf[7];
+    std::memcpy(buf, corners.data, 7);
+    corners.data[0] = buf[1];
+    corners.data[1] = buf[0];
+    corners.data[4] = buf[5];
+    corners.data[5] = buf[4];
+    for(uint8_t i = 0; i < 7; i++){
+        switch (corners.data[i]){
+        case 1:
+            corners.data[i] = 0;
+            break;
+        case 0:
+            corners.data[i] = 1;
+            break;
+        case 4:
+            corners.data[i] = 5;
+            break;
+        case 5:
+            corners.data[i] = 4;
+            break;
+        }
+    }
+}
+
 void Puppet::doTurnCorners(Corners& corners, uint8_t face, uint8_t dir){
     uint8_t buf[7];
-    for(uint8_t i = 0; i< 7; ++i){
+    std::memcpy(buf, corners.data, 7);
+    /*for(uint8_t i = 0; i< 7; ++i){
         buf[i] = corners.data[i];
-    }
+    }*/
     std::array<uint8_t, 4> movingCorners;
     if (face == 0) {
         movingCorners = {6,5,0,3};
@@ -1596,6 +1657,92 @@ void Puppet::printEdges(const Edges& edges){
     std::cout << std::endl;
 }
 
+void Puppet::rotateEdges(Edges& edges){
+    uint8_t buf[9];
+    std::memcpy(buf, edges.data, 9);
+    edges.data[0] = buf[2];
+    edges.data[1] = buf[0];
+    edges.data[2] = buf[1];
+    edges.data[3] = buf[5];
+    edges.data[4] = buf[3];
+    edges.data[5] = buf[4];
+    edges.data[6] = buf[8];
+    edges.data[7] = buf[6];
+    edges.data[8] = buf[7];
+    for(uint8_t i = 0; i < 9; i++){
+        switch (edges.data[i]){
+        case 0:
+            edges.data[i] = 1;
+            break;
+        case 1:
+            edges.data[i] = 2;
+            break;
+        case 2:
+            edges.data[i] = 0;
+            break;
+        case 3:
+            edges.data[i] = 4;
+            break;
+        case 4:
+            edges.data[i] = 5;
+            break;
+        case 5:
+            edges.data[i] = 3;
+            break;
+        case 6:
+            edges.data[i] = 7;
+            break;
+        case 7:
+            edges.data[i] = 8;
+            break;
+        case 8:
+            edges.data[i] = 6;
+            break;
+        }
+    }
+}
+
+void Puppet::mirrorEdges(Edges& edges){
+    uint8_t buf[9];
+    std::memcpy(buf, edges.data, 9);
+    edges.data[1] = buf[2];
+    edges.data[2] = buf[1];
+    edges.data[3] = buf[6];
+    edges.data[6] = buf[3];
+    edges.data[5] = buf[7];
+    edges.data[7] = buf[5];
+    edges.data[4] = buf[8];
+    edges.data[8] = buf[4];
+    for(uint8_t i = 0; i < 9; i++){
+        switch (edges.data[i]){
+        case 1:
+            edges.data[i] = 2;
+            break;
+        case 2:
+            edges.data[i] = 1;
+            break;
+        case 3:
+            edges.data[i] = 6;
+            break;
+        case 6:
+            edges.data[i] = 3;
+            break;
+        case 5:
+            edges.data[i] = 7;
+            break;
+        case 7:
+            edges.data[i] = 5;
+            break;
+        case 4:
+            edges.data[i] = 8;
+            break;
+        case 8:
+            edges.data[i] = 4;
+            break;
+        }
+    }
+}
+
 void Puppet::solvedFlips(Flips& flips){
     for(uint8_t i = 0; i< 9; ++i){
         flips.data[i]=1;
@@ -1637,6 +1784,22 @@ void Puppet::printFlips(const Flips& flips){
         std::cout << int(flips.data[i]);
     }
     std::cout << std::endl;
+}
+
+Puppet::FlipsFast Puppet::getFastFlips(const Flips& flips){
+    FlipsFast ff = {};
+    for(uint8_t i = 0; i< 9; ++i){
+        ff.setFlip(i, flips.data[i]);
+    }
+    return ff;
+}
+
+Puppet::Flips Puppet::getFlipsFromFast(const FlipsFast& ff) {
+    Flips flips = {};
+    for(uint8_t i = 0; i < 9; ++i) {
+        flips.data[i] = (ff.bits & (1U << i)) != 0;
+    }
+    return flips;
 }
 
 std::vector<uint8_t> Puppet::getEdgeCycle(const Edges& edges){
@@ -1768,5 +1931,103 @@ void Puppet::printFlippedEdges(const std::vector<uint8_t>flippedEdges){
             std::cout << int(i);
         }
         std::cout << " ";
+    }
+}
+
+void Puppet::rotateFlips(Flips& flips){
+    bool buf[9];
+    std::memcpy(buf, flips.data, 9);
+    flips.data[0] = buf[2];
+    flips.data[1] = buf[0];
+    flips.data[2] = buf[1];
+    flips.data[3] = buf[5];
+    flips.data[4] = buf[3];
+    flips.data[5] = buf[4];
+    flips.data[6] = buf[8];
+    flips.data[7] = buf[6];
+    flips.data[8] = buf[7];
+}
+
+void Puppet::mirrorFlips(Flips& flips){
+    bool buf[9];
+    std::memcpy(buf, flips.data, 9);
+    flips.data[1] = buf[2];
+    flips.data[2] = buf[1];
+    flips.data[3] = buf[6];
+    flips.data[6] = buf[3];
+    flips.data[5] = buf[7];
+    flips.data[7] = buf[5];
+    flips.data[4] = buf[8];
+    flips.data[8] = buf[4];
+}
+
+bool Puppet::doTurnState(State& state, uint8_t face, uint8_t dir){
+    bool ret = doTurn(state.shape, face, dir);
+    if(!ret) return ret;
+    doTurnCorners(state.corners, face, dir);
+    doTurnEdges(state.edges, face, dir);
+    doTurnFlips(state.flips, face, dir);
+    return ret;
+}
+
+Puppet::StateFast Puppet::getFastState(const State& state){
+    Puppet::StateFast sf;
+    sf.shape = getFastShape(state.shape);
+    std::memcpy(sf.corners.data, state.corners.data, sizeof(state.corners.data));
+    std::memcpy(sf.edges.data, state.edges.data, sizeof(state.edges.data));
+    sf.flips = getFastFlips(state.flips);
+    return sf;
+}
+
+void Puppet::solvedState(State& state){
+    cubeShape(state.shape);
+    solvedCorners(state.corners);
+    solvedEdges(state.edges);
+    solvedFlips(state.flips);
+}
+
+Puppet::fourE Puppet::get4E(const Edges& edges, bool G){
+    fourE buf;
+    for(uint8_t i = 0 + 4*G; i < 4 + 4*G; i++){
+        buf.data[i - 4*G] = edges.data[i];
+    }
+    return buf;
+}
+
+void Puppet::solveParity(const Corners& corners, Edges& edges){
+    bool parity = false;
+    uint8_t save;
+    Puppet::Corners corbuf;
+    for(uint8_t i = 0; i< 7; ++i){
+        corbuf.data[i] = corners.data[i];
+    }
+    while(!testCornersSolved(corbuf)){
+        for(uint8_t i = 0; i < 7; ++i){
+            if(corbuf.data[i] != i){
+                save = corbuf.data[corbuf.data[i]]; 
+                corbuf.data[corbuf.data[i]] = corbuf.data[i];
+                corbuf.data[i] = save;
+                parity = !parity;
+            }
+        }
+    }
+    Puppet::Edges edbuf;
+    for(uint8_t i = 0; i< 9; ++i){
+        edbuf.data[i] = edges.data[i];
+    }
+    while(countEdgesSolved(edbuf) != 9){
+        for(uint8_t i = 0; i < 9; ++i){
+            if(edbuf.data[i] != i){
+                save = edbuf.data[edbuf.data[i]]; 
+                edbuf.data[edbuf.data[i]] = edbuf.data[i];
+                edbuf.data[i] = save;
+                parity = !parity;
+            }
+        }
+    }
+    if(parity){
+        save = edges.data[0]; 
+        edges.data[0] = edges.data[1];
+        edges.data[1] = save;
     }
 }

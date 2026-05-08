@@ -1553,7 +1553,7 @@ void AlgFinder::searchAllShapes(){
     std::queue<std::vector<std::array<uint8_t, 2>>> algs;
     Puppet::ShapeBin found_shape;
     std::vector<Puppet::ShapeBin> found_shapes;
-    std::vector<std::pair<std::vector<std::array<uint8_t, 2>>, std::array<uint8_t, 6>>> found_algs;
+    std::vector<std::pair<std::vector<std::array<uint8_t, 2>>, std::array<uint8_t, 6>>> found_algs; //unnoetig!!
     std::vector<std::array<uint8_t, 2>> alg;
     found_shape = puppet.getBinShape(shape); 
     found_shapes.push_back(found_shape);
